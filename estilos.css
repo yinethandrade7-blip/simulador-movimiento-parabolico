@@ -1,0 +1,100 @@
+/* Estilos: minimalista, fondo blanco, azules y esquinas redondeadas */
+:root {
+  --azul: #2f6bff; --azul-claro: #5aa9ff; --azul-suave: #e8f0fe; --gris-fondo: #f4f6fa;
+  --texto: #2b3442; --suave: #6b778c; --borde: #e3e9f2; --error: #d93a3a;
+  --sombra: 0 2px 14px rgba(30, 60, 120, .07);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; color: var(--texto); background: #fff; line-height: 1.55; font-family: Inter, "Segoe UI", system-ui, -apple-system, Roboto, sans-serif; }
+.contenedor { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* Encabezado y navegación */
+.encabezado { padding: 28px 0 20px; }
+.encabezado-fila { display: flex; align-items: center; gap: 16px; }
+.logo { width: 56px; height: 56px; flex: none; }
+h1 { margin: 0; font-size: clamp(1.2rem, 3.4vw, 1.9rem); letter-spacing: .02em; line-height: 1.2; }
+.encabezado p { margin: 4px 0 0; color: var(--suave); }
+.navegacion { position: sticky; top: 0; z-index: 10; background: rgba(255, 255, 255, .94); backdrop-filter: blur(8px); border-bottom: 1px solid var(--borde); }
+.navegacion .contenedor { display: flex; flex-wrap: wrap; gap: 4px 6px; padding-top: 8px; padding-bottom: 8px; }
+.navegacion a { padding: 6px 12px; border-radius: 999px; color: var(--suave); text-decoration: none; font-size: .92rem; transition: background .2s, color .2s; }
+.navegacion a:hover { background: var(--azul-suave); color: var(--azul); }
+
+/* Secciones y tarjetas */
+.seccion { padding: 44px 0; scroll-margin-top: 56px; }
+.seccion.gris { background: var(--gris-fondo); }
+h2 { margin: 0 0 6px; font-size: 1.45rem; }
+h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.subtitulo { margin: 0 0 22px; color: var(--suave); max-width: 72ch; }
+.nota { margin: 16px 0 0; color: var(--suave); font-size: .9rem; }
+.tarjeta { background: #fff; border: 1px solid var(--borde); border-radius: 16px; padding: 20px; box-shadow: var(--sombra); }
+.texto-suave { margin: 0; color: var(--suave); font-size: .93rem; }
+.simbolo { display: inline-flex; align-items: center; justify-content: center; min-width: 38px; height: 30px; padding: 0 10px; margin-bottom: 10px; border-radius: 999px; background: var(--azul-suave); color: var(--azul); font-weight: 700; font-size: .9rem; }
+.rejilla-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.rejilla-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 16px; margin-top: 16px; }
+.rejilla-res { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+
+/* Formulario */
+.campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 18px; }
+label { font-weight: 600; font-size: .95rem; }
+input, select { width: 100%; margin-top: 6px; padding: 10px 12px; font: inherit; color: var(--texto); background: #fff; border: 1.5px solid #cdd8e8; border-radius: 10px; transition: border-color .2s, box-shadow .2s; }
+input:focus-visible, select:focus-visible, .boton:focus-visible, .navegacion a:focus-visible { outline: none; border-color: var(--azul); box-shadow: 0 0 0 3px rgba(47, 107, 255, .25); }
+input[aria-invalid="true"] { border-color: var(--error); }
+small { display: block; margin-top: 4px; font-weight: 400; font-size: .82rem; }
+.ayuda { color: var(--suave); }
+.error { color: var(--error); min-height: 1em; }
+.aviso { margin: 14px 0 0; padding: 10px 14px; border-radius: 10px; background: #fdeeee; color: #9b2c2c; }
+.botones, .controles { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-top: 18px; }
+
+/* Botones */
+.boton { padding: 11px 20px; font: inherit; font-weight: 700; border: 0; border-radius: 10px; cursor: pointer; transition: transform .15s, box-shadow .15s, background .15s; }
+.primario { background: var(--azul); color: #fff; box-shadow: 0 4px 12px rgba(47, 107, 255, .3); }
+.primario:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(47, 107, 255, .4); }
+.secundario { background: var(--azul-suave); color: var(--azul); }
+.secundario:hover:not(:disabled) { background: #d7e5fd; }
+.boton:disabled { opacity: .45; cursor: not-allowed; }
+.velocidad { margin-left: auto; font-size: .9rem; }
+.velocidad select { width: auto; min-width: 90px; margin-top: 2px; }
+
+/* Simulación */
+.lienzo-caja { width: 100%; }
+#lienzo { display: block; width: 100%; }
+.lecturas { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin: 18px 0 0; }
+.lecturas div { padding: 10px 12px; border-radius: 12px; background: var(--gris-fondo); }
+.lecturas dt { color: var(--suave); font-size: .8rem; }
+.lecturas dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Resultados */
+.resultado h3 { color: var(--suave); font-weight: 600; font-size: .92rem; }
+.valor { margin: 0 0 6px; font-size: 1.9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.unidad { font-size: 1rem; font-weight: 600; color: var(--azul); }
+
+/* Gráficas */
+.caja-grafica { position: relative; height: 300px; }
+.caja-grafica.grande { height: 340px; }
+
+/* Fórmulas y procedimiento */
+.ecuacion { margin: 6px 0 10px; padding: 10px 14px; border-radius: 10px; background: var(--azul-suave); color: #1d3f9e; font-family: "Cambria Math", Cambria, Georgia, serif; font-size: 1.1rem; overflow-wrap: anywhere; }
+.titulo-bloque { margin: 34px 0 0; font-size: 1.2rem; }
+.paso dl { margin: 10px 0 0; }
+.paso dt { margin-top: 10px; color: var(--suave); font-size: .8rem; font-weight: 600; }
+.paso dd { margin: 2px 0 0; font-family: "Cambria Math", Cambria, Georgia, serif; overflow-wrap: anywhere; }
+.paso .resultado-paso { color: var(--azul); font-weight: 700; }
+#explicacion p { margin: 0 0 10px; }
+#explicacion p:last-child { margin: 0; }
+.pie { padding: 24px 0; text-align: center; color: var(--suave); font-size: .88rem; border-top: 1px solid var(--borde); }
+
+@media (max-width: 600px) {
+  .seccion { padding: 32px 0; scroll-margin-top: 100px; }
+  .navegacion a { padding: 4px 9px; font-size: .84rem; }
+  .navegacion .contenedor { padding-top: 6px; padding-bottom: 6px; }
+  .seccion { scroll-margin-top: 80px; }
+  .encabezado-fila { align-items: flex-start; }
+  .logo { width: 44px; height: 44px; }
+  .boton { flex: 1 1 auto; }
+  .velocidad { margin-left: 0; width: 100%; }
+  .velocidad select { width: 100%; }
+  .caja-grafica, .caja-grafica.grande { height: 270px; }
+  .tarjeta { padding: 16px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }

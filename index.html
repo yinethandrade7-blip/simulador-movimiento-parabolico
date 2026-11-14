@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Simulador de movimiento parabólico</title>
+  <meta name="description" content="Simulador interactivo de movimiento parabólico: lanza un objeto, observa su trayectoria y revisa cada cálculo.">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <header class="encabezado">
+    <div class="contenedor encabezado-fila">
+      <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+        <path d="M5 40 Q24 -6 43 40" fill="none" stroke="#5aa9ff" stroke-width="3" stroke-dasharray="2 5" stroke-linecap="round"/>
+        <circle cx="24" cy="17" r="5" fill="#2f6bff"/>
+        <line x1="4" y1="42" x2="44" y2="42" stroke="#9aa7ba" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <h1>SIMULADOR DE MOVIMIENTO PARABÓLICO</h1>
+        <p>Lanza un objeto, observa su trayectoria y descubre cómo se calcula cada resultado.</p>
+      </div>
+    </div>
+  </header>
+  <nav class="navegacion" aria-label="Secciones">
+    <div class="contenedor">
+      <a href="#intro">Introducción</a><a href="#configuracion">Configuración</a><a href="#simulacion">Simulación</a>
+      <a href="#resultados">Resultados</a><a href="#graficas">Gráficas</a><a href="#formulas">Fórmulas</a><a href="#explicacion-seccion">Explicación</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="intro" class="seccion">
+      <div class="contenedor">
+        <h2>¿Qué es el movimiento parabólico?</h2>
+        <p class="subtitulo">Es el movimiento de un objeto lanzado al aire cuando solo la gravedad actúa sobre él, como un balón pateado o una piedra lanzada desde un puente. Su camino tiene forma de parábola.</p>
+        <div class="rejilla-3">
+          <article class="tarjeta"><span class="simbolo">→</span><h3>Horizontal</h3><p class="texto-suave">Nada lo frena ni lo empuja: avanza siempre con la misma velocidad.</p></article>
+          <article class="tarjeta"><span class="simbolo">↕</span><h3>Vertical</h3><p class="texto-suave">La gravedad lo frena al subir y lo acelera al bajar.</p></article>
+          <article class="tarjeta"><span class="simbolo">⌒</span><h3>Juntos</h3><p class="texto-suave">Los dos movimientos ocurren a la vez, sin estorbarse, y forman la parábola.</p></article>
+        </div>
+        <p class="nota">Este simulador no considera la resistencia del aire.</p>
+      </div>
+    </section>
+
+    <section id="configuracion" class="seccion gris">
+      <div class="contenedor">
+        <h2>Configura el lanzamiento</h2>
+        <p class="subtitulo">Escribe los cuatro datos y pulsa SIMULAR. Puedes cambiarlos y volver a simular cuando quieras.</p>
+        <form id="formulario" class="tarjeta" novalidate>
+          <div class="campos">
+            <label>Velocidad inicial V₀ (m/s)
+              <input type="number" id="velocidad" value="20" step="any" inputmode="decimal" aria-describedby="error-velocidad">
+              <small class="ayuda">Qué tan rápido sale. Debe ser positiva.</small><small class="error" id="error-velocidad" role="alert"></small>
+            </label>
+            <label>Ángulo θ (grados)
+              <input type="number" id="angulo" value="45" step="any" inputmode="decimal" aria-describedby="error-angulo">
+              <small class="ayuda">Entre 0° (horizontal) y 90° (vertical).</small><small class="error" id="error-angulo" role="alert"></small>
+            </label>
+            <label>Altura inicial h₀ (m)
+              <input type="number" id="altura" value="2" step="any" inputmode="decimal" aria-describedby="error-altura">
+              <small class="ayuda">Altura de salida sobre el suelo. Puede ser 0.</small><small class="error" id="error-altura" role="alert"></small>
+            </label>
+            <label>Gravedad g (m/s²)
+              <input type="number" id="gravedad" value="9.8" step="any" inputmode="decimal" aria-describedby="error-gravedad">
+              <small class="ayuda">En la Tierra 9.8; en la Luna 1.6.</small><small class="error" id="error-gravedad" role="alert"></small>
+            </label>
+          </div>
+          <p id="avisoGeneral" class="aviso" role="alert" hidden></p>
+          <div class="botones">
+            <button type="submit" class="boton primario" id="botonSimular">▶ SIMULAR</button>
+            <button type="button" class="boton secundario" id="botonRestablecer">↺ Restablecer valores</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="simulacion" class="seccion">
+      <div class="contenedor">
+        <h2>Simulación</h2>
+        <p class="subtitulo">La línea punteada es el camino calculado; el punto azul lo recorre en tiempo real.</p>
+        <div class="tarjeta">
+          <div class="lienzo-caja"><canvas id="lienzo" aria-label="Animación del lanzamiento del proyectil" role="img"></canvas></div>
+          <div class="controles">
+            <button type="button" class="boton primario" id="botonIniciar">▶ Iniciar</button>
+            <button type="button" class="boton secundario" id="botonPausa">▶ Continuar</button>
+            <button type="button" class="boton secundario" id="botonReiniciarAnimacion">↺ Reiniciar</button>
+            <label class="velocidad">Velocidad
+              <select id="velocidadReproduccion">
+                <option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option>
+                <option value="2">2×</option><option value="4">4×</option>
+              </select>
+            </label>
+          </div>
+          <dl class="lecturas">
+            <div><dt>Tiempo</dt><dd id="lecT">—</dd></div>
+            <div><dt>Posición horizontal</dt><dd id="lecX">—</dd></div>
+            <div><dt>Altura actual</dt><dd id="lecY">—</dd></div>
+            <div><dt>Velocidad horizontal</dt><dd id="lecVx">—</dd></div>
+            <div><dt>Velocidad vertical</dt><dd id="lecVy">—</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section id="resultados" class="seccion gris">
+      <div class="contenedor">
+        <h2>Resultados físicos</h2>
+        <p class="subtitulo">Todos se calculan en el código a partir de los datos que ingresaste.</p>
+        <div id="tarjetasResultados" class="rejilla-res"></div>
+      </div>
+    </section>
+
+    <section id="graficas" class="seccion">
+      <div class="contenedor">
+        <h2>Gráficas</h2>
+        <p class="subtitulo">Se actualizan con cada simulación. Pasa el cursor o el dedo sobre una curva para ver sus valores.</p>
+        <p id="avisoGraficas" class="aviso" hidden>No se pudo cargar Chart.js. Revisa tu conexión a internet y recarga la página.</p>
+        <div class="tarjeta caja-grafica grande"><canvas id="graficaTrayectoria"></canvas></div>
+        <div class="rejilla-2">
+          <div class="tarjeta caja-grafica"><canvas id="graficaVelocidad"></canvas></div>
+          <div class="tarjeta caja-grafica"><canvas id="graficaPosicion"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="formulas" class="seccion gris">
+      <div class="contenedor">
+        <h2>Fórmulas y procedimiento</h2>
+        <p class="subtitulo">Estas son las ecuaciones que usa el programa. En todas, el tiempo t se mide en segundos, las distancias en metros y las velocidades en m/s.</p>
+        <div class="rejilla-2">
+          <article class="tarjeta formula"><h3>Componentes de la velocidad inicial</h3><p class="ecuacion">V₀x = V₀·cos(θ)<br>V₀y = V₀·sen(θ)</p><p class="texto-suave">V₀ es la rapidez con la que sale el objeto y θ el ángulo con la horizontal (el programa lo pasa a radianes antes de usar seno y coseno). Sirven para separar el lanzamiento en un movimiento horizontal y uno vertical.</p></article>
+          <article class="tarjeta formula"><h3>Posición en el tiempo</h3><p class="ecuacion">x(t) = V₀x·t<br>y(t) = h₀ + V₀y·t − ½·g·t²</p><p class="texto-suave">x es la distancia horizontal e y la altura sobre el suelo en el instante t. h₀ es la altura de salida y g la gravedad: el término ½·g·t² es lo que la gravedad le «quita» a la altura.</p></article>
+          <article class="tarjeta formula"><h3>Velocidad en el tiempo</h3><p class="ecuacion">Vx(t) = V₀x<br>Vy(t) = V₀y − g·t</p><p class="texto-suave">En horizontal la velocidad no cambia. En vertical disminuye g cada segundo: llega a 0 en el punto más alto y luego se hace negativa (el objeto baja).</p></article>
+          <article class="tarjeta formula"><h3>Tiempo de vuelo</h3><p class="ecuacion">T = [V₀y + √(V₀y² + 2·g·h₀)] / g</p><p class="texto-suave">Sale de resolver y(t) = 0 (el objeto toca el suelo). Se usa la raíz positiva, porque el tiempo no puede ser negativo.</p></article>
+          <article class="tarjeta formula"><h3>Altura máxima</h3><p class="ecuacion">Hmáx = h₀ + V₀y² / (2·g)</p><p class="texto-suave">En el punto más alto Vy = 0. Se suma h₀ porque la altura se mide desde el suelo. Si V₀y = 0, el objeto no sube y Hmáx = h₀.</p></article>
+          <article class="tarjeta formula"><h3>Alcance y velocidad final</h3><p class="ecuacion">R = V₀x·T<br>Vf = √(Vxf² + Vyf²)</p><p class="texto-suave">El alcance es lo que avanza en horizontal durante todo el vuelo. Vxf y Vyf son Vx y Vy evaluadas en t = T, y Vf es la rapidez total con la que llega al suelo.</p></article>
+        </div>
+        <h3 class="titulo-bloque">Procedimiento paso a paso de tu simulación</h3>
+        <div id="procedimiento" class="rejilla-2"></div>
+      </div>
+    </section>
+
+    <section id="explicacion-seccion" class="seccion">
+      <div class="contenedor">
+        <h2>Explicación de los resultados</h2>
+        <p class="subtitulo">Qué significan, en palabras, los números de tu simulación.</p>
+        <div class="tarjeta" id="explicacion"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pie"><div class="contenedor">Proyecto de Física Mecánica · Movimiento parabólico sin resistencia del aire</div></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="fisica.js"></script>
+  <script src="validacion.js"></script>
+  <script src="procedimiento.js"></script>
+  <script src="animacion.js"></script>
+  <script src="graficas.js"></script>
+  <script src="interfaz.js"></script>
+</body>
+</html>
